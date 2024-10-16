@@ -1,4 +1,4 @@
-let Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
+let Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
 let mic;
 let mode = 0;
 let micLevel =0;
@@ -28,6 +28,14 @@ function preload() {
   Gf = loadImage('img/grass-f.png');
   Bb = loadImage('img/bird-b.png');
   Bw = loadImage('img/bird-w.png');
+  F = loadImage('img/fish.png');
+  Rb = loadImage('img/rice-b.png');
+  Re = loadImage('img/rice-e.png');
+  Rh = loadImage('img/rice-h.png');
+  Rla = loadImage('img/rice-la.png');
+  Rll = loadImage('img/rice-ll.png');
+  Rra = loadImage('img/rice-ra.png');
+  Rrl = loadImage('img/rice-rl.png');
 }
 
 
@@ -54,6 +62,19 @@ function setup() {
   startMicButton = createButton("Start Mic").position(20, 10).mousePressed(startMic);
 
   audioContext = getAudioContext();
+
+
+  // 물고기 객체 초기화
+  for (let i = 0; i < numFish; i++) {
+    fishImages.push({
+      x: random(width),         // 초기 X 위치
+      y: random(height),        // 초기 Y 위치
+      vx: random(-fishSpeed, fishSpeed), // X 축 속도
+      vy: random(-fishSpeed, fishSpeed), // Y 축 속도
+      angle: random(TWO_PI),    // 초기 회전 각도 (0부터 2*PI 사이의 랜덤값)
+      rotationSpeed: random(0.02, 0.05) // 회전 속도
+    });
+  }
 }
 
 
@@ -78,25 +99,32 @@ function stage1(){
 function stage2(){
   micLevel = mic.getLevel();
 
+    if (frameCount % 180 == 0){
+      mode++;
+  }
+  if (mode == 0){
+      mountain();
+  }
+  else if (mode == 1){
+      larva();
+  }
+  else if (mode == 2){
+    grass();
+  }  
+  else if (mode == 3){
+  moon();
+  }
+  else if (mode == 4){
   bird();
-
-//     if (frameCount % 180 == 0){
-//       mode++;
-//   }
-//   if (mode == 0){
-//       mountain();
-//   }
-//   else if (mode == 1){
-//       larva();
-//   }
-//   else if (mode == 2){
-//     grass();
-// }
-//   else {
-//       moon();
-//   if(frameCount % 720 == 0) 
-//       mode=0;
-//   }
+  }
+  else if (mode == 5){
+    rice();
+    }
+  else {
+    fish();
+  if(frameCount % 1360 == 0) 
+      mode=0;
+  }
 
   text(mouseX +' ' + mouseY, mouseX, mouseY);
 
@@ -285,4 +313,105 @@ function bird() {
 
     image(Bw, 0, value * -40);
   pop();
+}
+
+
+let fishImages = []; // 물고기 정보를 담을 배열
+let numFish = 5; // 물고기 개수
+let fishSpeed = 1; // 이동 속도 기본값
+
+
+
+  
+
+function fish(){
+
+
+  background('#DAEA42');
+
+  micLevel = mic.getLevel(); // 마이크 입력값 업데이트
+  let slowFactor = micLevel > 0.1 ? 0.1 : 1; // 소리가 크면 속도 느리게
+
+  // 모든 물고기들에 대해 업데이트 및 그리기
+  for (let fish of fishImages) {
+    // 위치 업데이트 (소리 크기에 따라 이동 속도 조정)
+    fish.x += fish.vx * slowFactor;
+    fish.y += fish.vy * slowFactor;
+
+    // 화면 경계를 벗어나면 속도 반전
+    if (fish.x < 0 || fish.x > width) fish.vx *= -1;
+    if (fish.y < 0 || fish.y > height) fish.vy *= -1;
+
+    // 회전 각도 업데이트
+    fish.angle = sin(frameCount * 2) * 15; // 부드러운 회전
+
+    fish.angle += fish.rotationSpeed;
+    let size = micLevel > 0.03 ? 300 : 200; // 소리가 일정 크기 이상이면 크기 증가
+
+
+    // 물고기 그리기
+    push();
+    translate(fish.x, fish.y); // 물고기 위치로 이동
+    rotate(fish.angle);        // 각도 회전
+    imageMode(CENTER);         // 이미지를 중심 기준으로
+    image(F, 0, 0, size, size);    // 물고기 이미지 크기 80x80
+    pop();
+  }
+
+  // 디버그: 소리 크기 표시
+  fill(0);
+  textSize(16);
+  text('Mic Level: ' + micLevel.toFixed(2), 10, 20);
+}
+
+
+
+
+function rice(){
+  background('#2C97A3');
+  let value = map(micLevel, 0,1,0,300);
+  text(value, 50, 100);
+
+  push();
+    translate(195, 370);
+    image(Rb, 0, 0, 130+value, 130+value);
+  pop();
+
+  push();
+    translate(195, 340);
+    image(Rh, 0, 0-value);
+  pop();
+
+  push();
+    translate(165, 325);
+    image(Re, 0-value*3, 0-value*2);
+  pop();
+
+  push();
+    translate(205, 320);
+    image(Re, 0+value*3, 0-value*3);
+  pop();
+
+  push();
+    translate(100, 390);
+    image(Rla, 0-value, 0-value);
+  pop();
+
+  push();
+    translate(120, 450);
+    rotate(0+value*0.5)
+    image(Rll, 0-value*1.5, 0+value*1.5);
+  pop();
+
+  push();
+    translate(260, 390);
+    rotate(0-value*0.5)
+    image(Rra, 0+value*1.5, 0-value);
+  pop();
+
+  push();
+    translate(250, 450);
+    image(Rrl, 0+value, 0+value*2);
+  pop();
+
 }
