@@ -52,7 +52,7 @@ function startMic() {
 
 
 function setup() {
-  createCanvas(375, 812);
+  createCanvas(390, 900);
   mic = new p5.AudioIn();
   mic.start();
   getAudioContext().resume();
@@ -145,13 +145,12 @@ function mousePressed() {
     let fs = fullscreen();
     fullscreen(!fs);
   }
-  
 }
 
 function mountain(){
   background('#C9E5FF');
 
-  let value = map(micLevel, 0,1,0,100);
+  let value = map(micLevel, 0,1,0,800);
   text(value,50,100);
   
   push();
@@ -179,7 +178,7 @@ function mountain(){
 function larva(){
   background('#76D4E0');
  
-  let value = micLevel*30;
+  let value = micLevel*800;
   text(value,50,100);
   
   push();
@@ -197,7 +196,7 @@ function larva(){
 
 function moon(){
   background('#373640');
-  let value = micLevel*30;
+  let value = micLevel*800;
   text(value,50,100);
   
   push();
@@ -218,7 +217,7 @@ function moon(){
 
 function grass(){
   background('#D1C52C');
-  let value = micLevel*50;
+  let value = micLevel*800;
   text(value, 50, 100);
 
   push();
@@ -290,7 +289,7 @@ function grass(){
 
 function bird() {
   background('#54D778');
-  let value = micLevel * 50; // 소리 크기 기반 값
+  let value = micLevel * 800; // 소리 크기 기반 값
   text(value, 50, 100);
 
   // Bb 이미지 - 위아래로 진동 + 소리 크기에 따른 범위 확대
@@ -330,7 +329,7 @@ function fish(){
   background('#DAEA42');
 
   micLevel = mic.getLevel(); // 마이크 입력값 업데이트
-  let slowFactor = micLevel > 0.1 ? 0.1 : 1; // 소리가 크면 속도 느리게
+  let slowFactor = micLevel > 0.01 ? 0.1 : 1; // 소리가 크면 속도 느리게
 
   // 모든 물고기들에 대해 업데이트 및 그리기
   for (let fish of fishImages) {
@@ -346,7 +345,7 @@ function fish(){
     fish.angle = sin(frameCount * 2) * 15; // 부드러운 회전
 
     fish.angle += fish.rotationSpeed;
-    let size = micLevel > 0.03 ? 300 : 200; // 소리가 일정 크기 이상이면 크기 증가
+    let size = micLevel > 0.01 ? 300 : 200; // 소리가 일정 크기 이상이면 크기 증가
 
 
     // 물고기 그리기
@@ -369,7 +368,7 @@ function fish(){
 
 function rice(){
   background('#2C97A3');
-  let value = map(micLevel, 0,1,0,300);
+  let value = map(micLevel, 0,1,0,800);
   text(value, 50, 100);
 
   push();
@@ -398,9 +397,9 @@ function rice(){
   pop();
 
   push();
-    translate(120, 450);
+    translate(135, 450);
     rotate(0+value*0.5)
-    image(Rll, 0-value*1.5, 0+value*1.5);
+    image(Rll, 0-value, 0+value*1.5);
   pop();
 
   push();
@@ -413,5 +412,4 @@ function rice(){
     translate(250, 450);
     image(Rrl, 0+value, 0+value*2);
   pop();
-
 }
