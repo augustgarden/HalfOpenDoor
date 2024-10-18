@@ -1,4 +1,4 @@
-let Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
+let S, Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
 let mic;
 let mode = 0;
 let micLevel =0;
@@ -36,6 +36,7 @@ function preload() {
   Rll = loadImage('img/rice-ll.png');
   Rra = loadImage('img/rice-ra.png');
   Rrl = loadImage('img/rice-rl.png');
+  S = loadImage('img/snail.png');
 }
 
 
@@ -99,6 +100,8 @@ function stage1(){
 function stage2(){
   micLevel = mic.getLevel();
 
+
+
     if (frameCount % 180 == 0){
       mode++;
   }
@@ -120,9 +123,12 @@ function stage2(){
   else if (mode == 5){
     rice();
     }
+  else if (mode == 6){
+    snail();
+      }
   else {
     fish();
-  if(frameCount % 1360 == 0) 
+  if(frameCount % 1440 == 0) 
       mode=0;
   }
 
@@ -217,7 +223,7 @@ function moon(){
 
 function grass(){
   background('#D1C52C');
-  let value = micLevel*800;
+  let value = micLevel*1400;
   text(value, 50, 100);
 
   push();
@@ -329,13 +335,13 @@ function fish(){
   background('#DAEA42');
 
   micLevel = mic.getLevel(); // 마이크 입력값 업데이트
-  let slowFactor = micLevel > 0.01 ? 0.1 : 1; // 소리가 크면 속도 느리게
+  let value = micLevel * 800;
 
   // 모든 물고기들에 대해 업데이트 및 그리기
   for (let fish of fishImages) {
     // 위치 업데이트 (소리 크기에 따라 이동 속도 조정)
-    fish.x += fish.vx * slowFactor;
-    fish.y += fish.vy * slowFactor;
+    fish.x += fish.vx * value;
+    fish.y += fish.vy * value;
 
     // 화면 경계를 벗어나면 속도 반전
     if (fish.x < 0 || fish.x > width) fish.vx *= -1;
@@ -345,7 +351,7 @@ function fish(){
     fish.angle = sin(frameCount * 2) * 15; // 부드러운 회전
 
     fish.angle += fish.rotationSpeed;
-    let size = micLevel > 0.01 ? 300 : 200; // 소리가 일정 크기 이상이면 크기 증가
+    let size = value > 0.01 ? 300 : 200; // 소리가 일정 크기 이상이면 크기 증가
 
 
     // 물고기 그리기
@@ -368,7 +374,7 @@ function fish(){
 
 function rice(){
   background('#2C97A3');
-  let value = map(micLevel, 0,1,0,800);
+  let value = map(micLevel, 0,1,0,14000);
   text(value, 50, 100);
 
   push();
@@ -411,5 +417,67 @@ function rice(){
   push();
     translate(250, 450);
     image(Rrl, 0+value, 0+value*2);
+  pop();
+}
+
+
+
+
+let x = 50; // 초기 X 위치
+let y = 80; // 초기 Y 위치
+let speed = 1; // 초기 속도 (마이크 입력으로 변경됨)
+let direction = 'right'; // 현재 이동 방향
+let angle = 0; // 현재 회전 각도 (머리의 방향)
+let targetAngle = 0; // 목표 회전 각도 (방향 변경 시)
+let stretchFactor = 0.2; // X축 확대/축소 정도
+let imgWidth = 100; // 이미지 너비 (예시)
+let imgHeight = 50; // 이미지 높이 (예시)
+
+function snail() {
+  background('#E9E9E3');
+
+  // 마이크 레벨에 따라 속도 조절
+  speed = map(micLevel, 0, 1, 0.5, 20);
+  let stretchSpeed = map(micLevel, 0, 1, 0.2, 1); // 소리가 클수록 더 빠르게 늘어남
+  text('Speed: ' + speed.toFixed(2), 50, 100);
+
+  // 이동 경로 계산 (테두리 내에서 반시계 방향 이동)
+  if (direction === 'right') x = min(x + speed, width - imgWidth / 2); 
+  if (direction === 'down') y = min(y + speed, height - imgHeight / 2);
+  if (direction === 'left') x = max(x - speed, imgWidth / 2);
+  if (direction === 'up') y = max(y - speed, imgHeight / 2);
+
+  // 테두리에 도달하면 방향과 목표 각도 변경
+  if (x >= width - imgWidth / 2 && direction === 'right') {
+    direction = 'down';
+    targetAngle = 90;
+  }
+  if (y >= height - imgHeight / 2 && direction === 'down') {
+    direction = 'left';
+    targetAngle = 180;
+  }
+  if (x <= imgWidth / 2 && direction === 'left') {
+    direction = 'up';
+    targetAngle = 270;
+  }
+  if (y <= imgHeight / 2 && direction === 'up') {
+    direction = 'right';
+    targetAngle = 0;
+  }
+
+  // 각도 wrap-around 처리 (최단 경로로 회전)
+  let angleDiff = (targetAngle - angle + 540) % 360 - 180;
+  angle += angleDiff * 0.01;
+
+  // 소리 입력에 따라 늘어나는 정도 계산
+  stretchFactor = 1 + 0.2 * sin(frameCount * stretchSpeed * 7);
+
+  // 이미지 그리기
+  push();
+  translate(x, y);
+  rotate(angle);
+  scale(stretchFactor*0.8, 0.8);
+  imageMode(CENTER);
+  image(S, 0, 0);
   pop();
 }
