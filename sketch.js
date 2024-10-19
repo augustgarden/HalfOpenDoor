@@ -1,4 +1,4 @@
-let S, Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
+let Da, Db, Dc, Dt, Dba, Dbb, Dbc, Dbt, G, S, Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
 let mic;
 let mode = 0;
 let micLevel =0;
@@ -37,6 +37,15 @@ function preload() {
   Rra = loadImage('img/rice-ra.png');
   Rrl = loadImage('img/rice-rl.png');
   S = loadImage('img/snail.png');
+  G = loadImage('img/ghost.png');
+  Da = loadImage('img/dog-a.png');
+  Db = loadImage('img/dog-b.png');
+  Dc = loadImage('img/dog-c.png');
+  Dt = loadImage('img/dog-t.png');
+  Dba = loadImage('img/dog-ba.png');
+  Dbb = loadImage('img/dog-bb.png');
+  Dbc = loadImage('img/dog-bc.png');
+  Dbt = loadImage('img/dog-bt.png');
 }
 
 
@@ -84,22 +93,19 @@ function draw(){
 
   if(curState ==1) stage1();
   if(curState ==2) stage2();
-  
-  
 }
+
 
 
 
 function stage1(){
   background(200);
   image(M,150,200);
-
 }
 
 
 function stage2(){
   micLevel = mic.getLevel();
-
 
 
     if (frameCount % 180 == 0){
@@ -108,27 +114,34 @@ function stage2(){
   if (mode == 0){
       mountain();
   }
+  
   else if (mode == 1){
-      larva();
+      dog();
   }
   else if (mode == 2){
-    grass();
+    ghost();
   }  
   else if (mode == 3){
-  moon();
+    moon();
   }
   else if (mode == 4){
-  bird();
+    bird();
   }
   else if (mode == 5){
     rice();
-    }
+  }
   else if (mode == 6){
     snail();
-      }
+  }
+  else if (mode == 7){
+    larva();
+  }
+  else if (mode == 8){
+    grass();
+  }
   else {
     fish();
-  if(frameCount % 1440 == 0) 
+  if(frameCount % 1800 == 0) 
       mode=0;
   }
 
@@ -137,6 +150,8 @@ function stage2(){
   console.log(micLevel);
   startMicButton.hide();
 }
+
+
 
 
 function mousePressed() {
@@ -152,6 +167,9 @@ function mousePressed() {
     fullscreen(!fs);
   }
 }
+
+
+
 
 function mountain(){
   background('#C9E5FF');
@@ -176,7 +194,6 @@ function mountain(){
   pop();
   //image(L, 170, 600-value*4-80);
 }
-
 
 
 
@@ -221,6 +238,7 @@ function moon(){
 
 
 
+
 function grass(){
   background('#D1C52C');
   let value = micLevel*1400;
@@ -256,7 +274,6 @@ function grass(){
     rotate(-value);
     image(Gf, 0, 0);
   pop();
-
 
   push();
     translate(-20,220);
@@ -321,17 +338,13 @@ function bird() {
 }
 
 
+
+
 let fishImages = []; // 물고기 정보를 담을 배열
 let numFish = 5; // 물고기 개수
 let fishSpeed = 1; // 이동 속도 기본값
 
-
-
-  
-
 function fish(){
-
-
   background('#DAEA42');
 
   micLevel = mic.getLevel(); // 마이크 입력값 업데이트
@@ -481,3 +494,124 @@ function snail() {
   image(S, 0, 0);
   pop();
 }
+
+
+
+
+let x1 = 180; // 첫 번째 유령의 초기 X 위치
+let y1 = 220; // 첫 번째 유령의 Y 위치
+
+let x2 = 180; // 두 번째 유령의 초기 X 위치
+let y2 = 660; // 두 번째 유령의 Y 위치
+
+let amplitude = 150; // 최대 이동 거리 (진폭)
+let baseSpeed = 0.01; // 기본 속도 (프레임당 이동 비율)
+
+function ghost() {
+  background('#D3429C');
+
+  let value = micLevel * 4;
+  text('Mic Level: ' + value.toFixed(2), 50, 100);
+
+  // 첫 번째 유령: 왼쪽으로 갔다가 되돌아오기 (sin 함수 사용)
+  let xOffset1 = amplitude * sin(frameCount * (baseSpeed + value));
+
+  push();
+  translate(x1 - xOffset1, y1);
+  image(G, 0, 0);
+  pop();
+
+  // 두 번째 유령: 오른쪽으로 갔다가 되돌아오기 (위상 차이 추가)
+  let xOffset2 = amplitude * sin(frameCount * (baseSpeed + value) + PI); // 반대쪽 움직임
+
+  push();
+  translate(x2 + xOffset2, y2);
+  image(G, 0, 0);
+  pop();
+}
+
+
+
+
+let jumpOffset = 0; // 점프 이동량 저장 변수
+let legsOffset = 0; 
+let frontOffset = 0;
+
+function dog() {
+  background('#FFDC81');
+
+  let value = micLevel * 140; // 마이크 입력값 스케일링
+  text('Mic Level: ' + value.toFixed(2), 50, 100);
+
+  // 회전 각도 계산: 회전 범위는 -5 ~ +5도
+  let bounce = sin(40 + frameCount * 30); 
+
+  // 마이크 레벨이 0.07 이상일 때 점프와 회전
+  if (micLevel > 0.04) {
+    jumpOffset = sin(frameCount * 0.3) * -50; // 점프 효과
+    legsOffset = sin(frameCount * 0.1) * 30; // 점프 효과
+    frontOffset = sin(frameCount * 0.1) * 30; // 점프 효과
+  } else {
+    jumpOffset = 0; // 점프 중지
+    legsOffset = 0; // 점프 중지
+    frontOffset = 0; // 점프 중지
+  }
+
+  // Da 이미지 (고정)
+  push();
+  translate(135, 185 + jumpOffset); // y축에 점프 적용
+  scale(0.8);
+  rotate(0+frontOffset); // Dc 회전 적용
+  image(Da, 0, 0);
+  pop();
+
+  // Db 이미지 (고정)
+  push();
+  translate(170, 130 + jumpOffset); // y축에 점프 적용
+  scale(0.8);
+  image(Db, 0, 0);
+  pop();
+
+  // Dc 이미지 (회전 및 점프)
+  push();
+  translate(260, 195 + jumpOffset); // y축에 점프 적용
+  rotate(0-legsOffset); // Dc 회전 적용
+  scale(0.8);
+  image(Dc, 0, 0);
+  pop();
+
+  // Dt 이미지 (회전과 점프)
+  push();
+  translate(260, 120 + jumpOffset); // y축에 점프 적용
+  rotate(bounce); 
+  scale(0.8);
+  image(Dt, 0, 0);
+  pop();
+
+  // Dbb 이미지 (고정)
+  push();
+  translate(-150, 480 + jumpOffset); // y축에 점프 적용
+  scale(1.3);
+  image(Dbb, 0, 0);
+  pop();
+
+  // Dbc 이미지 (회전 및 점프)
+  push();
+  translate(250, 730 + jumpOffset); // y축에 점프 적용
+  rotate(0-legsOffset); // Dbc 회전 적용
+  scale(1.3);
+  image(Dbc, 0, 0);
+  pop();
+
+  // Dbt 이미지 (회전과 점프)
+  push();
+  translate(210, 460 + jumpOffset); // y축에 점프 적용
+  rotate(bounce);
+  scale(1.3);
+  image(Dbt, 0, 0);
+  pop();
+}
+
+
+
+
