@@ -6,3 +6,11 @@ html, body {
 canvas {
   display: block;
 }
+
+button {
+  font-size: 20px;
+  border: none;
+  padding: 150px 60px;
+  color: transparent;
+  background: transparent;
+}
