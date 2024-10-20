@@ -135,16 +135,16 @@ function stage2(){
       dog();
   }
   else if (mode == 2){
-    ghost();
+    bird();
   }  
   else if (mode == 3){
     moon2();
   }
   else if (mode == 4){
-    bird();
+    ghost();
   }
   else if (mode == 5){
-    rice();
+    grass();
   }
   else if (mode == 6){
     snail();
@@ -153,15 +153,18 @@ function stage2(){
     larva();
   }
   else if (mode == 8){
-    grass();
+    rice();
   }
   else {
     fish();
   if(frameCount % 1800 == 0) 
       mode=0;
+    
   }
 
-  text(mouseX +' ' + mouseY, mouseX, mouseY);
+  text(width + ' ' + height,100,100);
+
+  // text(mouseX +' ' + mouseY, mouseX, mouseY);
 
   // console.log(micLevel);
   startMicButton.hide();
@@ -194,7 +197,7 @@ function windowResized() {
 function mountain(){
   background('#C9E5FF');
 
-  let value = map(micLevel, 0,1,0,800);
+  let value = map(micLevel, 0,1,0,400);
   text(value,50,100);
   
   push();
@@ -221,7 +224,7 @@ function mountain(){
 function larva(){
   background('#76D4E0');
  
-  let value = micLevel*400;
+  let value = micLevel*200;
   text(value,50,100);
   
   push();
@@ -245,21 +248,21 @@ function larva(){
     push();
       let angle = frameCount * 0.1;
       rotate(angle);
-      tint(255, 100+value*50);
+      tint(255, 100+value*20);
       image(M, 190, 70);
     pop();
 
     push();
       let angle2 = frameCount * 0.05;
       rotate(-angle2);
-      tint(255, 100+value*50);
+      tint(255, 60+value*20);
       image(M, -200, 500);
     pop();
 
     push();
       let angle3 = frameCount * 0.01;
       rotate(-angle3);
-      tint(255, 100+value*50);
+      tint(255, 60+value*50);
       image(M, 600, 600);
     pop();
 
@@ -318,11 +321,11 @@ function larva(){
 
 function grass(){
   background('#D1C52C');
-  let value = micLevel*1400;
+  let value = micLevel*400;
   text(value, 50, 100);
 
   push();
-    translate(-20,700);
+    translate(-20,680);
     rotate(value*2);
     image(Ga, 0, 0);
   pop();
@@ -342,7 +345,7 @@ function grass(){
     image(Gd, 0, 0);
   pop();
   push();
-    translate(340,680);
+    translate(340,660);
     rotate(value);
     image(Ge, 0, 0);
   pop();
@@ -389,7 +392,7 @@ function grass(){
 
 function bird() {
   background('#54D778');
-  let value = micLevel * 400; // 소리 크기 기반 값
+  let value = micLevel * 100; // 소리 크기 기반 값
   text(value, 50, 100);
 
   // Bb 이미지 - 위아래로 진동 + 소리 크기에 따른 범위 확대
@@ -407,9 +410,8 @@ function bird() {
     translate(190, 530+ bounce);
 
     // 회전 각도 계산: -30도 ~ +30도 범위에서 진동
-    let angle = sin(frameCount * 5 * (1 + micLevel/1.5)) ;
+    let angle = sin(frameCount * 5 * (10 + micLevel)) ;
     rotate(angle);
-
     image(Bw, 0, value * -40);
   pop();
 }
@@ -464,7 +466,7 @@ function fish(){
 
 function rice(){
   background('#2C97A3');
-  let value = map(micLevel, 0,1,0,14000);
+  let value = map(micLevel, 0,1,0,400);
   text(value, 50, 100);
 
   push();
