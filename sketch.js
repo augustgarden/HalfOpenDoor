@@ -162,7 +162,7 @@ function stage2(){
     
   }
 
-  text(width + ' ' + height,500,100);
+  text(width + ' ' + height,500,400);
 
   // text(mouseX +' ' + mouseY, mouseX, mouseY);
 
