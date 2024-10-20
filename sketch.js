@@ -54,7 +54,7 @@ function preload() {
 }
 
 
-function button() {
+function startMic() {
   if (!micStarted) {
     getAudioContext().resume();
     mic.start();
@@ -67,15 +67,16 @@ function button() {
 
 
 function setup() {
-  createCanvas(390, 900);
+  createCanvas(windowWidth, windowHeight);
   mic = new p5.AudioIn();
   mic.start();
   getAudioContext().resume();
 
   angleMode(DEGREES);
   imageMode(CENTER);
-  button = createButton('Open!');
-  button.position(120, 80);
+  startMicButton = createButton('Open!');
+  startMicButton.position(120, 80);
+  mousePressed(startMic);
 
   audioContext = getAudioContext();
 
@@ -169,7 +170,7 @@ function stage2(){
   text(mouseX +' ' + mouseY, mouseX, mouseY);
 
   console.log(micLevel);
-  button.hide();
+  startMicButton.hide();
 }
 
 
@@ -187,6 +188,10 @@ function mousePressed() {
     let fs = fullscreen();
     fullscreen(!fs);
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // 새 창 크기에 맞게 캔버스 조정
 }
 
 
