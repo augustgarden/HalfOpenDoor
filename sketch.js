@@ -73,6 +73,7 @@ function setup() {
   imageMode(CENTER);
   startMicButton = createButton('Open!').position(120, 80).mousePressed(startMic);
 
+  audioContext = getAudioContext();
 
   // 물고기 객체 초기화
   for (let i = 0; i < numFish; i++) {
@@ -101,8 +102,6 @@ function draw(){
 let toggle = true; // 이미지를 전환할 때 사용할 변수
 
 function stage1() {
-
-  mic.start();
   background('#7DD0E5');
   
   push();
