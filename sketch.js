@@ -65,20 +65,13 @@ function startMic() {
   micStarted = !micStarted;
 }
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   mic = new p5.AudioIn();
-  mic.start();
   getAudioContext().resume();
-
   angleMode(DEGREES);
   imageMode(CENTER);
-  startMicButton = createButton('Open!');
-  startMicButton.position(120, 80);
-  mousePressed(startMic);
-
-  audioContext = getAudioContext();
+  startMicButton = createButton('Open!').position(120, 80).mousePressed(startMic);
 
 
   // 물고기 객체 초기화
@@ -108,6 +101,8 @@ function draw(){
 let toggle = true; // 이미지를 전환할 때 사용할 변수
 
 function stage1() {
+
+  mic.start();
   background('#7DD0E5');
   
   push();
