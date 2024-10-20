@@ -111,16 +111,16 @@ function stage1() {
   
   push();
     scale(0.7);
-    image(Dot, 480, 50);
+    image(Dot, 420, 50);
   pop();
   image(Dol, 45, 40);
-  image(Doi, 280, 260); // 고정된 이미지
+  image(Doi, 240, 260); // 고정된 이미지
 
   // frameCount를 이용하여 이미지를 번갈아 표시
   if (frameCount % 60 < 30) { // 60 프레임마다 30프레임씩 교체
-    image(Doc, 285, 265); 
+    image(Doc, 245, 265); 
   } else {
-    image(Doo, 296, 278);
+    image(Doo, 256, 278);
   }
 }
 
@@ -222,7 +222,7 @@ function mountain(){
 function larva(){
   background('#76D4E0');
  
-  let value = micLevel*800;
+  let value = micLevel*400;
   text(value,50,100);
   
   push();
@@ -390,7 +390,7 @@ function grass(){
 
 function bird() {
   background('#54D778');
-  let value = micLevel * 800; // 소리 크기 기반 값
+  let value = micLevel * 400; // 소리 크기 기반 값
   text(value, 50, 100);
 
   // Bb 이미지 - 위아래로 진동 + 소리 크기에 따른 범위 확대
@@ -408,7 +408,7 @@ function bird() {
     translate(190, 530+ bounce);
 
     // 회전 각도 계산: -30도 ~ +30도 범위에서 진동
-    let angle = sin(frameCount * 5 * (1 + micLevel * 5)) * 15;
+    let angle = sin(frameCount * 5 * (1 + micLevel/1.5)) ;
     rotate(angle);
 
     image(Bw, 0, value * -40);
