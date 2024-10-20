@@ -71,7 +71,7 @@ function setup() {
   getAudioContext().resume();
   angleMode(DEGREES);
   imageMode(CENTER);
-  startMicButton = createButton('Open!').position(120, 80).mousePressed(startMic);
+  startMicButton = createButton('Open!').position(0, 0).mousePressed(startMic);
 
   audioContext = getAudioContext();
 
@@ -163,7 +163,7 @@ function stage2(){
 
   text(mouseX +' ' + mouseY, mouseX, mouseY);
 
-  console.log(micLevel);
+  // console.log(micLevel);
   startMicButton.hide();
 }
 
