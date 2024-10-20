@@ -1,4 +1,4 @@
-let Da, Db, Dc, Dt, Dba, Dbb, Dbc, Dbt, G, S, Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
+let Doi, Doo, Doc, Dot, Dol, Da, Db, Dc, Dt, Dba, Dbb, Dbc, Dbt, G, S, Rb, Re, Rh, Rla, Rll, Rra, Rrl, F, Bb, Bw, B, L, R, La, Lb, Lc, Ld, Le, Lf, M, Gf, Ga, Gb, Gc, Gd, Ge;
 let mic;
 let mode = 0;
 let micLevel =0;
@@ -46,10 +46,15 @@ function preload() {
   Dbb = loadImage('img/dog-bb.png');
   Dbc = loadImage('img/dog-bc.png');
   Dbt = loadImage('img/dog-bt.png');
+  Doo = loadImage('img/door-o.png');
+  Doc = loadImage('img/door-c.png');
+  Dot = loadImage('img/door-text.png');
+  Dol = loadImage('img/door-logo.png');
+  Doi = loadImage('img/door-i.png');
 }
 
 
-function startMic() {
+function button() {
   if (!micStarted) {
     getAudioContext().resume();
     mic.start();
@@ -69,7 +74,8 @@ function setup() {
 
   angleMode(DEGREES);
   imageMode(CENTER);
-  startMicButton = createButton("Start Mic").position(20, 10).mousePressed(startMic);
+  button = createButton('Open!');
+  button.position(180, 100);
 
   audioContext = getAudioContext();
 
@@ -98,9 +104,24 @@ function draw(){
 
 
 
-function stage1(){
-  background(200);
-  image(M,150,200);
+let toggle = true; // 이미지를 전환할 때 사용할 변수
+
+function stage1() {
+  background('#7DD0E5');
+  
+  push();
+    scale(0.7);
+    image(Dot, 480, 50);
+  pop();
+  image(Dol, 45, 40);
+  image(Doi, 280, 260); // 고정된 이미지
+
+  // frameCount를 이용하여 이미지를 번갈아 표시
+  if (frameCount % 60 < 30) { // 60 프레임마다 30프레임씩 교체
+    image(Doc, 285, 265); 
+  } else {
+    image(Doo, 296, 278);
+  }
 }
 
 
@@ -122,7 +143,7 @@ function stage2(){
     ghost();
   }  
   else if (mode == 3){
-    moon();
+    moon2();
   }
   else if (mode == 4){
     bird();
@@ -148,7 +169,7 @@ function stage2(){
   text(mouseX +' ' + mouseY, mouseX, mouseY);
 
   console.log(micLevel);
-  startMicButton.hide();
+  button.hide();
 }
 
 
@@ -217,24 +238,81 @@ function larva(){
 
 
 
-function moon(){
-  background('#373640');
-  let value = micLevel*800;
-  text(value,50,100);
-  
-  push();
-    let angle = frameCount * 0.1;
-    rotate(angle);
-    tint(255, 100+value*50);
-    image(M, 190, 400);
-  pop();
-  push();
-    let angle2 = frameCount* 0.1;
-    rotate(angle2);
-    tint(255, 100+value*50);
-    image(M, 500, 50);
-  pop();
+  function moon2(){
+    background('#373640');
+    let value = micLevel*800;
+    text(value,50,100);
+
+    push();
+      let angle = frameCount * 0.1;
+      rotate(angle);
+      tint(255, 100+value*50);
+      image(M, 190, 70);
+    pop();
+
+    push();
+      let angle2 = frameCount * 0.05;
+      rotate(-angle2);
+      tint(255, 100+value*50);
+      image(M, -200, 500);
+    pop();
+
+    push();
+      let angle3 = frameCount * 0.01;
+      rotate(-angle3);
+      tint(255, 100+value*50);
+      image(M, 600, 600);
+    pop();
+
 }
+
+// function moon(){
+//   background('#373640');
+//   let value = micLevel*800;
+//   text(value,50,100);
+  
+//   push();
+//     let angle = frameCount * 0.1;
+//     rotate(angle);
+//     tint(255, 100+value*50);
+//     image(M, 190, 400);
+//   pop();
+//   push();
+//     let angle2 = frameCount* 0.1;
+//     rotate(angle2);
+//     tint(255, 100+value*50);
+//     image(M, 500, 50);
+//   pop();
+
+//   push();
+//     let angle6 = frameCount* 0.1;
+//     rotate(angle6);
+//     tint(255, 100+value*50);
+//     image(M, -250, 100);
+//   pop();
+
+//   push();
+//   let angle3 = frameCount* 0.06;
+//     rotate(-angle3);
+//     tint(255, 100+value*50);
+//     image(M, -400, 800);
+//   pop();
+
+//   push();
+//   let angle4 = frameCount* 0.06;
+//     rotate(-angle4);
+//     tint(255, 100+value*50);
+//     image(M, -800, 200);
+//   pop();
+
+//   push();
+//   let angle5 = frameCount* 0.16;
+//     rotate(-angle5);
+//     tint(255, 100+value*50);
+//     image(M, -200, -100);
+//   pop();
+// }
+
 
 
 
@@ -392,7 +470,7 @@ function rice(){
 
   push();
     translate(195, 370);
-    image(Rb, 0, 0, 130+value, 130+value);
+    image(Rb, 0, 0, 130+value/2, 130+value/2);
   pop();
 
   push();
@@ -546,8 +624,8 @@ function dog() {
   // 회전 각도 계산: 회전 범위는 -5 ~ +5도
   let bounce = sin(40 + frameCount * 30); 
 
-  // 마이크 레벨이 0.07 이상일 때 점프와 회전
-  if (micLevel > 0.04) {
+  // 마이크 레벨이 0.04 이상일 때 점프와 회전
+  if (micLevel > 0.03) {
     jumpOffset = sin(frameCount * 0.3) * -50; // 점프 효과
     legsOffset = sin(frameCount * 0.1) * 30; // 점프 효과
     frontOffset = sin(frameCount * 0.1) * 30; // 점프 효과
