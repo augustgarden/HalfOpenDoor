@@ -75,7 +75,7 @@ function setup() {
   angleMode(DEGREES);
   imageMode(CENTER);
   button = createButton('Open!');
-  button.position(180, 100);
+  button.position(120, 80);
 
   audioContext = getAudioContext();
 
