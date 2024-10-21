@@ -162,7 +162,7 @@ function stage2(){
     
   }
 
-  text(width + ' ' + height,500,400);
+  // text(width + ' ' + height,500,100);
 
   // text(mouseX +' ' + mouseY, mouseX, mouseY);
 
@@ -198,7 +198,7 @@ function mountain(){
   background('#C9E5FF');
 
   let value = map(micLevel, 0,1,0,400);
-  text(value,50,100);
+  // text(value,50,100);
   
   push();
     imageMode(CORNER);
@@ -225,7 +225,7 @@ function larva(){
   background('#76D4E0');
  
   let value = micLevel*200;
-  text(value,50,100);
+  // text(value,50,100);
   
   push();
     image(La, 190+value*20, 170);
@@ -243,7 +243,7 @@ function larva(){
   function moon2(){
     background('#373640');
     let value = micLevel*800;
-    text(value,50,100);
+    // text(value,50,100);
 
     push();
       let angle = frameCount * 0.1;
@@ -322,7 +322,7 @@ function larva(){
 function grass(){
   background('#D1C52C');
   let value = micLevel*400;
-  text(value, 50, 100);
+  // text(value, 50, 100);
 
   push();
     translate(-20,680);
@@ -393,7 +393,7 @@ function grass(){
 function bird() {
   background('#54D778');
   let value = micLevel * 100; // 소리 크기 기반 값
-  text(value, 50, 100);
+  // text(value, 50, 100);
 
   // Bb 이미지 - 위아래로 진동 + 소리 크기에 따른 범위 확대
   let bounce = sin(frameCount * 10) * (10 + value); // 진동 범위가 value에 따라 커짐
@@ -456,9 +456,9 @@ function fish(){
   }
 
   // 디버그: 소리 크기 표시
-  fill(0);
-  textSize(16);
-  text('Mic Level: ' + micLevel.toFixed(2), 10, 20);
+  // fill(0);
+  // textSize(16);
+  // text('Mic Level: ' + micLevel.toFixed(2), 10, 20);
 }
 
 
@@ -467,7 +467,7 @@ function fish(){
 function rice(){
   background('#2C97A3');
   let value = map(micLevel, 0,1,0,400);
-  text(value, 50, 100);
+  // text(value, 50, 100);
 
   push();
     translate(195, 370);
@@ -531,7 +531,7 @@ function snail() {
   // 마이크 레벨에 따라 속도 조절
   speed = map(micLevel, 0, 1, 0.5, 20);
   let stretchSpeed = map(micLevel, 0, 1, 0.2, 1); // 소리가 클수록 더 빠르게 늘어남
-  text('Speed: ' + speed.toFixed(2), 50, 100);
+  // text('Speed: ' + speed.toFixed(2), 50, 100);
 
   // 이동 경로 계산 (테두리 내에서 반시계 방향 이동)
   if (direction === 'right') x = min(x + speed, width - imgWidth / 2); 
@@ -590,7 +590,7 @@ function ghost() {
   background('#D3429C');
 
   let value = micLevel * 4;
-  text('Mic Level: ' + value.toFixed(2), 50, 100);
+  // text('Mic Level: ' + value.toFixed(2), 50, 100);
 
   // 첫 번째 유령: 왼쪽으로 갔다가 되돌아오기 (sin 함수 사용)
   let xOffset1 = amplitude * sin(frameCount * (baseSpeed + value));
@@ -620,7 +620,7 @@ function dog() {
   background('#FFDC81');
 
   let value = micLevel * 140; // 마이크 입력값 스케일링
-  text('Mic Level: ' + value.toFixed(2), 50, 100);
+  // text('Mic Level: ' + value.toFixed(2), 50, 100);
 
   // 회전 각도 계산: 회전 범위는 -5 ~ +5도
   let bounce = sin(40 + frameCount * 30); 
